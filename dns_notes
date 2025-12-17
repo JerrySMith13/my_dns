@@ -1,0 +1,22 @@
+RFC 1035 - DNS
+
+- Message is both question and answer
+- QTYPE = TYPE = A, CNAME, etc.
+- QCLASS = 3.2.4
+
+# DNS message format:
+
+headers: 
+- ID - 16 bit id identifying messages for resolver
+- QR - single bit specifying whether message is query or response
+- opcode - 4 bit num specifying kind of query:
+	- possible values: standard query, inverse, server status (see 4.1.1)
+
+- authoritative answer - bit is only valid in responses, specifies that the server is an authority for the domain name in Q section
+
+- TC bit - specifies that message was truncated due to a length more than permitted by channel
+
+- RD - recursion desired bit
+- RA - recursion available bit
+
+

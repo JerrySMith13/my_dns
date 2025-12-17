@@ -3,35 +3,25 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 )
+
+var REQ_MAXSIZE = 1024
+
+func handle_conn(conn: net.TCPConn*) error {
+
+}
 
 func main() {
 
-	bound, err := net.Listen("tcp", ":8080")
-
+	bound, err := net.Listen("tcp", "127.0.0.1:8080")
+	net.ParseIP(os.Args[1])
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
 	fmt.Printf("Listening on port %s\n", bound.Addr().String())
-	var buf []byte
 
-	conn, err := bound.Accept()
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return
-	}
+	buf := make([]byte, 4096)
 
-	read, err := conn.Read(buf)
-
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return
-	}
-
-	fmt.Printf("Bytes read: %d\n", read)
-
-	str := string(buf)
-
-	fmt.Println(str)
 }
