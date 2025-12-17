@@ -8,15 +8,46 @@ RFC 1035 - DNS
 
 headers: 
 - ID - 16 bit id identifying messages for resolver
+next byte: 
 - QR - single bit specifying whether message is query or response
 - opcode - 4 bit num specifying kind of query:
 	- possible values: standard query, inverse, server status (see 4.1.1)
-
 - authoritative answer - bit is only valid in responses, specifies that the server is an authority for the domain name in Q section
-
 - TC bit - specifies that message was truncated due to a length more than permitted by channel
-
 - RD - recursion desired bit
+
+next byte:
 - RA - recursion available bit
+- Z - 3 bit reserved space, must all be 0
+RCODE - 4 bit response code (1 = formaterr, 2 = serverr, 3 = namenotexist, 4 = notimpl, 5 = refused)
+
+next byte(s):  
+QDCOUNT - 16 bit int specifying num questions
+ANCOUND - uint16 specifying num answers 
+NSCOUNT - uint16 - num ns resource records
+ARCOUNT - uint16 num entries in additional records 
 
 
+question entry(s):
+qname - domain name (label sequence)
+	- labels are a string with a leading byte representing length
+		[5 as byte, 'h', 'e', 'l', 'l', 'o']
+qtype - uint16 representing TYPE field from 3
+qclass - uint16 representing CLASS field from 3
+
+note: rr = resource record
+rr entry(s):
+NAME - domain name for record
+TYPE - uint16 representing rr TYPE code from 3
+CLASS - uint16 for class of RDATA
+TTL - uint32 specifying TTL in seconds for caching
+	If TTL is 0, then record SHOULD NOT be cached
+RDLENGTH - uint16 - len(in octets) of RDATA string
+RDATA - string of rdata given meaning by class + type
+
+NAME compression tecniques:
+if leading two bytes are 0, then it is normal name
+if leading two bytes are 1, then it is pointer
+- pointer's remaining 63 octets 
+
+4.1.4
